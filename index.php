@@ -13,7 +13,7 @@
 
     //The endpoint must be at least 3 in length
     if(sizeof($endpoint) < 3){
-        echo json_encode( array("status" => 400, "You must specify an endpoint and a function") );
+        echo json_encode( array("status" => 400, "info" => "You must specify an endpoint and a function") );
         die();
     }
 
@@ -104,7 +104,7 @@
     include_once('ApiSettings.php');
 
     //Include the common functions. Done here so the user can't bypass function_exists checks
-    include_once('common_functions');
+    include_once('CommonFunctions.php');
 
     //Finally, execute the requested function
     echo json_encode($endpoint[2]());
