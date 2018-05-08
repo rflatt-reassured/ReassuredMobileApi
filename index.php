@@ -103,6 +103,9 @@
     //Import the API settings to get all the keys necessary
     include_once('ApiSettings.php');
 
+    //Include the common functions. Done here so the user can't bypass function_exists checks
+    include_once('common_functions');
+
     //Finally, execute the requested function
     $endpoint[2]();
 ?>
