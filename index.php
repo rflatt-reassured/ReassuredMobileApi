@@ -107,5 +107,5 @@
     include_once('common_functions');
 
     //Finally, execute the requested function
-    $endpoint[2]();
+    echo json_encode($endpoint[2]());
 ?>
