@@ -1,5 +1,5 @@
 <?php
 
-    function UserList(){
-        return queryDB("SELECT id, firstname, lastname FROM users");
+    function test(){
+        echo json_encode(array("status" => 200, "info" => "you have reached the users endpoint test function successfully."));
     }

@@ -63,17 +63,18 @@
         //Include the database file now
         include_once('Database.php');
 
-        //Authenticate the user now
-        //1. Get the all matching users from the DB
-        $query = ("SELECT"
-            . " id, email, firstname, lastname, team_id, location_id"
-            . " FROM users"
-            . " WHERE email='" . mysqli_real_escape_string( $db, $credentials['email'] )  . "'"
-            . " AND password='". mysqli_real_escape_string( $db, $credentials['password'] ) ."'"
-            . " AND activated = 1");
-        $query_result = mysqli_query($db, $query);
-        $user_results = mysqli_fetch_all($query_result, MYSQLI_ASSOC);
-        //2. Check only one row matches
+        //Prepare the login query
+        $query = $db->prepare("SELECT id, email, password, firstname, lastname, team_id, location_id, display_location FROM users WHERE email = :email AND password = :password");
+
+        //Add the parameters and execute
+        $query->execute(array(
+                ':email' => $credentials['email'],
+                ':password' => $credentials['password']
+            ));
+
+        //Fetch all the results
+        $user_results = $query->fetchAll(PDO::FETCH_ASSOC);
+
         if(sizeof($user_results) != 1){
             echo json_encode( array("status" => 403, "info" => "Authentication error. Incorrect credentials.") );
             die();
