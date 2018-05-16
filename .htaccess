@@ -2,7 +2,7 @@
     RewriteEngine On
 
     # This is different between local host and production server!!!
-    RewriteBase /ReassuredMobileApi
+    RewriteBase /
 
     #Removes access to the system folder by users.
     #Additionally this will allow you to create a System.php controller,

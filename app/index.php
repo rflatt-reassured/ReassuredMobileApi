@@ -12,13 +12,13 @@
     $endpoint = array_values(array_filter(explode('/', $_SERVER['REQUEST_URI'])));
 
     //The endpoint must be at least 3 in length
-    if(sizeof($endpoint) < 3){
+    if(sizeof($endpoint) < 2){
         echo json_encode( array("status" => 400, "info" => "You must specify an endpoint and a function") );
         die();
     }
 
     //Find the root function
-    $rootFunction = ($endpoint[1] . '/' . $endpoint[2]);
+    $rootFunction = ($endpoint[0] . '/' . $endpoint[1]);
 
     //This is a list of authentication exempt endpoints
     $authExempt = array(
@@ -61,7 +61,7 @@
         }
 
         //Include the database file now
-        include_once('Database.php');
+        include_once('../includes/Database.php');
 
         //Prepare the login query
         $query = $db->prepare("SELECT id, email, password, firstname, lastname, team_id, location_id, display_location FROM users WHERE email = :email AND password = :password");
@@ -85,7 +85,7 @@
     }
 
     //Build the file name
-    $fileName = (__DIR__ . '/' . $endpoint[1] . '.php');
+    $fileName = ('../controllers/' . $endpoint[0] . '.php');
 
     //Look for the file that is being requested
     if(!file_exists($fileName)){
@@ -96,17 +96,17 @@
     }
 
     //Does the function exist?
-    if(!function_exists($endpoint[2])){
+    if(!function_exists($endpoint[1])){
         echo json_encode( array( "status" => 400, "info" => "Requested function does not exist. Consult API docs." ) );
         die();
     }
 
     //Import the API settings to get all the keys necessary
-    include_once('ApiSettings.php');
+    include_once('../includes/ApiSettings.php');
 
     //Include the common functions. Done here so the user can't bypass function_exists checks
-    include_once('CommonFunctions.php');
+    include_once('../includes/CommonFunctions.php');
 
     //Finally, execute the requested function
-    echo json_encode($endpoint[2]());
+    echo json_encode($endpoint[1]());
 ?>
